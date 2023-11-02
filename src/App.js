@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useEffect } from 'react';
+import userManager from './authService';
 
 function App() {
+  useEffect(() => {
+    // Check if we're in the callback
+    console.log(window.location.pathname)
+    if (window.location.pathname === '/loginresponse') {
+        userManager.signinRedirectCallback().then(user => {
+        window.location.pathname = '/';
+      }).catch(err => {
+        console.log(err);
+      });
+    }
+  }, []);
+
+  const login = () => {
+    userManager.signinRedirect();
+  };
+
+  const logout = () => {
+    userManager.signoutRedirect();
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={login}>Login</button>
+      <button onClick={logout}>Logout</button>
     </div>
   );
 }
